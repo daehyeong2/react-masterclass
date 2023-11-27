@@ -76,12 +76,13 @@ const Tabs = styled.div`
   max-width: 480px;
   background-color: rgba(0, 0, 0, 0.5);
 `;
-const Tab = styled.button<{ active: boolean }>`
+const Tab = styled.button<{ active: string }>`
   width: 50%;
   height: 100%;
   border: 1px solid black;
   transition: background-color 0.2s ease-in-out;
-  background-color: ${(props) => (props.active ? "#718093" : "#2f3640")};
+  background-color: ${(props) =>
+    props.active == "true" ? "#718093" : "#2f3640"};
   a {
     width: 100%;
     height: 100%;
@@ -194,7 +195,7 @@ function Coin() {
             </OverviewItem>
             <OverviewItem>
               <span>SYMBOL:</span>
-              <span>{infoData?.symbol}</span>
+              <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
               <span>OPEN SOURCE:</span>
@@ -217,10 +218,10 @@ function Coin() {
           {infoData?.error ? null : (
             <>
               <Tabs>
-                <Tab active={priceMatch !== null}>
+                <Tab active={priceMatch !== null ? "true" : "false"}>
                   <Link to={`/${coinId}/price`}>Price</Link>
                 </Tab>
-                <Tab active={priceMatch === null}>
+                <Tab active={priceMatch === null ? "true" : "false"}>
                   <Link to={`/${coinId}/chart`}>Chart</Link>
                 </Tab>
               </Tabs>
@@ -229,7 +230,7 @@ function Coin() {
                   <Price />
                 </Route>
                 <Route path="/:coinId/chart">
-                  <Chart />
+                  <Chart coinId={coinId} />
                 </Route>
               </Switch>
             </>
