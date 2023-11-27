@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   Link,
   Route,
@@ -10,6 +9,8 @@ import {
 import styled from "styled-components";
 import Price from "./Price";
 import Chart from "./Chart";
+import { useQuery } from "react-query";
+import { fetchCoinInfo, fetchCoinTickers } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -119,7 +120,7 @@ interface InfoData {
   last_data_at: string;
   error?: string;
 }
-interface PriceData {
+interface TickersData {
   id: string;
   name: string;
   symbol: string;
@@ -155,37 +156,28 @@ interface PriceData {
 
 function Coin() {
   const { coinId } = useParams<RouteParams>();
-  const [loading, setLoading] = useState(true);
   const { state } = useLocation<RouteState>();
-  const [info, setInfo] = useState<InfoData>();
-  const [priceInfo, setPriceInfo] = useState<PriceData>();
   const priceMatch = useRouteMatch("/:coinId/price");
 
-  useEffect(() => {
-    (async () => {
-      const infoData = await (
-        await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-      ).json();
-      const priceData = await (
-        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-      ).json();
-      setInfo(infoData);
-      setPriceInfo(priceData);
-      setLoading(false);
-    })();
-  }, [coinId]);
+  const { isLoading: infoLoading, data: infoData } = useQuery<InfoData>(
+    ["info", coinId],
+    () => fetchCoinInfo(coinId)
+  );
+  const { isLoading: tickersLoading, data: tickersData } =
+    useQuery<TickersData>(["tickers", coinId], () => fetchCoinTickers(coinId));
 
+  const loading = infoLoading || tickersLoading;
   return (
     <Container>
       <Header>
         <Title>
-          {info?.error
+          {infoData?.error
             ? "404 Not Found."
             : state?.name
             ? state.name
             : loading
             ? "Loading..."
-            : info?.name}
+            : infoData?.name}
         </Title>
       </Header>
       <Back>
@@ -198,29 +190,31 @@ function Coin() {
           <Overview>
             <OverviewItem>
               <span>RANK:</span>
-              <span>{info?.rank}</span>
+              <span>{infoData?.rank}</span>
             </OverviewItem>
             <OverviewItem>
               <span>SYMBOL:</span>
-              <span>{info?.symbol}</span>
+              <span>{infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
               <span>OPEN SOURCE:</span>
-              <span>{info?.error ? "" : info?.open_source ? "Yes" : "No"}</span>
+              <span>
+                {infoData?.error ? "" : infoData?.open_source ? "Yes" : "No"}
+              </span>
             </OverviewItem>
           </Overview>
-          <Description>{info?.description}</Description>
+          <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
               <h3>TOTAL SUPLY:</h3>
-              <span>{priceInfo?.total_supply}</span>
+              <span>{tickersData?.total_supply}</span>
             </OverviewItem>
             <OverviewItem>
               <h3>MAX SUPPLY:</h3>
-              <span>{priceInfo?.max_supply}</span>
+              <span>{tickersData?.max_supply}</span>
             </OverviewItem>
           </Overview>
-          {info?.error ? null : (
+          {infoData?.error ? null : (
             <>
               <Tabs>
                 <Tab active={priceMatch !== null}>
