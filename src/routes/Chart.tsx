@@ -21,6 +21,9 @@ function Chart({ coinId }: ChartProps) {
   const { isLoading, data } = useQuery<IHistorical[]>(["chart", coinId], () =>
     fetchCoinHistory(coinId)
   );
+  if (!isLoading && !(data && data[0]?.close)) {
+    return <span>404 Not Found.</span>;
+  }
   return (
     <div>
       {isLoading ? (

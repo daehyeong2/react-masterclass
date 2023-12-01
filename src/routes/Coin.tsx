@@ -11,6 +11,7 @@ import Price from "./Price";
 import Chart from "./Chart";
 import { useQuery } from "react-query";
 import { fetchCoinInfo, fetchCoinTickers } from "../api";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -82,7 +83,7 @@ const Tab = styled.button<{ active: string }>`
   border: 1px solid black;
   transition: background-color 0.2s ease-in-out;
   background-color: ${(props) =>
-    props.active == "true" ? "#718093" : "#2f3640"};
+    props.active === "true" ? "#718093" : "#2f3640"};
   a {
     width: 100%;
     height: 100%;
@@ -153,6 +154,7 @@ interface TickersData {
       volume_24h_change_24h: number;
     };
   };
+  error?: string;
 }
 
 function Coin() {
@@ -170,6 +172,17 @@ function Coin() {
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
+      <Helmet>
+        <title>
+          {infoData?.error
+            ? "404 Not Found."
+            : state?.name
+            ? state.name
+            : loading
+            ? "Loading..."
+            : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
         <Title>
           {infoData?.error
@@ -198,9 +211,11 @@ function Coin() {
               <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>OPEN SOURCE:</span>
+              <span>Price:</span>
               <span>
-                {infoData?.error ? "" : infoData?.open_source ? "Yes" : "No"}
+                {tickersData?.error
+                  ? ""
+                  : tickersData?.quotes.USD.price.toFixed(2)}
               </span>
             </OverviewItem>
           </Overview>
