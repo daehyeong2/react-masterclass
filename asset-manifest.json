@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/react-masterclass/static/css/main.0bb4240f.css",
+    "main.js": "/react-masterclass/static/js/main.3f3135fb.js",
+    "index.html": "/react-masterclass/index.html",
+    "main.0bb4240f.css.map": "/react-masterclass/static/css/main.0bb4240f.css.map",
+    "main.3f3135fb.js.map": "/react-masterclass/static/js/main.3f3135fb.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0bb4240f.css",
+    "static/js/main.3f3135fb.js"
+  ]
+}
