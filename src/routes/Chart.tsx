@@ -24,17 +24,20 @@ function Chart({ coinId }: ChartProps) {
   if (!isLoading && !(data && data[0]?.close)) {
     return <span>404 Not Found.</span>;
   }
+  const mappedOhlcvData = data?.map((v: IHistorical) => ({
+    x: new Date(v.time_close * 1000).toISOString(),
+    y: [v.open, v.high, v.low, v.close],
+  }));
   return (
     <div>
       {isLoading ? (
         "Loading chart..."
       ) : (
         <ApexCharts
-          type="line"
+          type="candlestick"
           series={[
             {
-              name: "Price",
-              data: data?.map((price) => Number(price.close)) as number[],
+              data: mappedOhlcvData as unknown as number[],
             },
           ]}
           options={{
@@ -45,12 +48,6 @@ function Chart({ coinId }: ChartProps) {
               show: false,
             },
             xaxis: {
-              labels: {
-                show: false,
-              },
-              axisBorder: {
-                show: false,
-              },
               axisTicks: {
                 show: false,
               },
@@ -66,22 +63,6 @@ function Chart({ coinId }: ChartProps) {
               background: "transparent",
               toolbar: {
                 show: false,
-              },
-              height: 300,
-              width: 500,
-            },
-            stroke: {
-              curve: "smooth",
-              width: 4,
-            },
-            fill: {
-              type: "gradient",
-              gradient: { gradientToColors: ["#55efc4"], stops: [0, 100] },
-            },
-            colors: ["#0984e3"],
-            tooltip: {
-              y: {
-                formatter: (value) => `$${value}`,
               },
             },
           }}
