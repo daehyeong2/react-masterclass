@@ -1,9 +1,12 @@
-import { ThemeProvider, createGlobalStyle } from "styled-components";
+import styled, { ThemeProvider, createGlobalStyle } from "styled-components";
 import Router from "./Router";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { darkTheme, lightTheme } from "./theme";
-import { useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isDarkAtom } from "./atoms";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
 config.autoAddCss = true;
 
 const GlobalStyle = createGlobalStyle`
@@ -61,6 +64,7 @@ table {
 body{
   font-family: 'Source Sans Pro', sans-serif;
   background-color: ${(props) => props.theme.bgColor};
+  transition: background-color .1s ease-in-out;
   color: ${(props) => props.theme.textColor};
   ::-webkit-scrollbar {
     display: none;
@@ -71,18 +75,41 @@ a{
   color: inherit;
 }
 `;
+interface DarkModeProps {
+  isDark: boolean;
+}
+
+const DarkMode = styled.div<DarkModeProps>`
+  transition: background-color 0.1s ease-in-out;
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  background-color: ${(props) => (props.isDark ? "white" : "black")};
+  box-shadow: 1px 1px;
+  padding: 5px;
+  border-radius: 13px;
+  cursor: pointer;
+  svg {
+    color: ${(props) => (props.isDark ? "black" : "white")};
+    width: 35px;
+    height: 35px;
+  }
+`;
 
 function App() {
-  const [isDark, setIsDark] = useState(true);
-  const toggleDark = () => {
-    setIsDark((current) => !current);
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => {
+    setDarkAtom((current) => !current);
   };
   return (
     <>
       <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
-        <button onClick={toggleDark}>Toggle Mode</button>
         <GlobalStyle />
         <Router />
+        <DarkMode isDark={isDark} onClick={toggleDarkAtom}>
+          <FontAwesomeIcon icon={isDark ? faSun : faMoon} />
+        </DarkMode>
       </ThemeProvider>
     </>
   );

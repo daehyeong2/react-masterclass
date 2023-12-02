@@ -73,9 +73,9 @@ function Price(props: IPrice) {
         "Loading Price..."
       ) : (
         <PriceTable>
-          <PriceRow>Price : {data?.quotes.USD.price.toFixed(2)}</PriceRow>
+          <PriceRow>Price : ${data?.quotes.USD.price.toFixed(2)}</PriceRow>
           <PriceRow>
-            All Time High : {data?.quotes.USD.ath_price.toFixed(2)}
+            All Time High : ${data?.quotes.USD.ath_price.toFixed(2)}
           </PriceRow>
           <PriceRow>
             Change 30 minutes : {data?.quotes.USD.percent_change_30m}%

@@ -37,13 +37,15 @@ const Loader = styled.h3`
   text-align: center;
 `;
 const Overview = styled.div`
+  transition: all 0.02s ease-in-out;
   display: flex;
   align-items: center;
   justify-content: space-between;
   max-width: 480px;
   border-radius: 15px;
   height: 65px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: ${(props) => props.theme.bgColor};
+  border: 1px solid ${(props) => props.theme.textColor};
   padding: 0 30px;
 `;
 const OverviewItem = styled.div`
@@ -83,7 +85,7 @@ const Tab = styled.button<{ active: string }>`
   border: 1px solid black;
   transition: background-color 0.2s ease-in-out;
   background-color: ${(props) =>
-    props.active === "true" ? "#718093" : "#2f3640"};
+    props.active === "true" ? props.theme.accentColor : "#B99470"};
   a {
     width: 100%;
     height: 100%;
@@ -168,7 +170,6 @@ function Coin() {
   );
   const { isLoading: tickersLoading, data: tickersData } =
     useQuery<TickersData>(["tickers", coinId], () => fetchCoinTickers(coinId));
-
   const loading = infoLoading || tickersLoading;
   return (
     <Container>
@@ -215,7 +216,7 @@ function Coin() {
               <span>
                 {tickersData?.error
                   ? ""
-                  : tickersData?.quotes.USD.price.toFixed(2)}
+                  : `$${tickersData?.quotes.USD.price.toFixed(2)}`}
               </span>
             </OverviewItem>
           </Overview>
