@@ -1,5 +1,8 @@
 import { createGlobalStyle } from "styled-components";
 import ToDoList from "./components/ToDoList";
+import { useRecoilValue } from "recoil";
+import { toDoState } from "./atoms";
+import { useEffect } from "react";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -69,6 +72,10 @@ a{
 `;
 
 function App() {
+  const toDos = useRecoilValue(toDoState);
+  useEffect(() => {
+    localStorage.setItem("toDos", JSON.stringify(toDos));
+  }, [toDos]);
   return (
     <>
       <GlobalStyle />
