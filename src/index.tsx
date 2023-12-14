@@ -63,7 +63,7 @@ body{
   font-family: 'Source Sans Pro', sans-serif;
   background-color: ${(props) => props.theme.bgColor};
   transition: background-color .1s ease-in-out;
-  color: ${(props) => props.theme.textColor};
+  color: black;
   ::-webkit-scrollbar {
     display: none;
 }
