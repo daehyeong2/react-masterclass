@@ -3,7 +3,6 @@ import App from "./App";
 import { RecoilRoot } from "recoil";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { darkTheme } from "./theme";
-import { Helmet } from "react-helmet";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -29,7 +28,6 @@ time, mark, audio, video {
   font-size: 100%;
   font: inherit;
   vertical-align: baseline;
-  font-family: 'Hahmlet', serif;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -76,12 +74,6 @@ a{
 root.render(
   <RecoilRoot>
     <ThemeProvider theme={darkTheme}>
-      <Helmet>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Hahmlet&display=swap"
-          rel="stylesheet"
-        />
-      </Helmet>
       <GlobalStyle />
       <App />
     </ThemeProvider>
