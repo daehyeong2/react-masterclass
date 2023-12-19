@@ -60,12 +60,9 @@ table {
 }
 body{
   font-family: 'Source Sans Pro', sans-serif;
-  background-color: ${(props) => props.theme.bgColor};
   transition: background-color .1s ease-in-out;
   color: black;
-  ::-webkit-scrollbar {
-    display: none;
-  }
+  background:linear-gradient(135deg,#e09,#d0e);
 }
 a{
   text-decoration: none;
