@@ -3,12 +3,12 @@ import App from "./App";
 import { RecoilRoot } from "recoil";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { darkTheme } from "./theme";
+import { Helmet } from "react-helmet";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -74,6 +74,9 @@ a{
 root.render(
   <RecoilRoot>
     <ThemeProvider theme={darkTheme}>
+      <Helmet>
+        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap" />
+      </Helmet>
       <GlobalStyle />
       <App />
     </ThemeProvider>
