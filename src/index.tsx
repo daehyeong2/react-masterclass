@@ -60,6 +60,7 @@ body{
   font-family: 'Source Sans Pro', sans-serif;
   transition: background-color .1s ease-in-out;
   color: black;
+  background: linear-gradient(135deg, #e09, #d0e);
 }
 a{
   text-decoration: none;
@@ -73,9 +74,6 @@ a{
 root.render(
   <RecoilRoot>
     <ThemeProvider theme={darkTheme}>
-      <Helmet>
-        <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap" />
-      </Helmet>
       <GlobalStyle />
       <App />
     </ThemeProvider>
