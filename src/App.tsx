@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { Variants, motion } from "framer-motion";
+import { AnimatePresence, Variants, motion } from "framer-motion";
+import { useState } from "react";
 
 const Wrapper = styled(motion.div)`
   height: 100vh;
@@ -7,40 +8,75 @@ const Wrapper = styled(motion.div)`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+  position: relative;
 `;
 
-const Svg = styled(motion.svg)`
-  width: 300px;
-  height: 300px;
-  path {
-    stroke: white;
-    stroke-width: 3;
-  }
+const Box = styled(motion.div)`
+  position: absolute;
+  top: 100px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  background-color: white;
+  height: 200px;
+  width: 400px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-const svg: Variants = {
-  start: { pathLength: 0, fill: "rgba(255, 255, 255, 0)" },
-  end: {
-    pathLength: 1,
-    fill: "rgba(255, 255, 255, 1)",
+const box: Variants = {
+  invisible: {
+    x: 500,
+    opacity: 0,
+    scale: 0,
+  },
+  visible: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    rotateY: 360,
+    transition: {
+      duration: 0.5,
+    },
+  },
+  exit: {
+    x: -500,
+    opacity: 0,
+    scale: 0,
+    rotateY: 180,
+    transition: {
+      duration: 0.5,
+    },
   },
 };
 
 function App() {
+  const [visible, setVisible] = useState(1);
+  const nextPlease = () => setVisible((prev) => (prev === 6 ? 6 : prev + 1));
+  const prevPlease = () => setVisible((prev) => (prev === 1 ? 1 : prev - 1));
   return (
     <Wrapper>
-      <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-        <motion.path
-          variants={svg}
-          initial="start"
-          animate="end"
-          transition={{
-            default: { duration: 5 },
-            fill: { duration: 1, delay: 3 },
-          }}
-          d="M524.5 69.8a1.5 1.5 0 0 0 -.8-.7A485.1 485.1 0 0 0 404.1 32a1.8 1.8 0 0 0 -1.9 .9 337.5 337.5 0 0 0 -14.9 30.6 447.8 447.8 0 0 0 -134.4 0 309.5 309.5 0 0 0 -15.1-30.6 1.9 1.9 0 0 0 -1.9-.9A483.7 483.7 0 0 0 116.1 69.1a1.7 1.7 0 0 0 -.8 .7C39.1 183.7 18.2 294.7 28.4 404.4a2 2 0 0 0 .8 1.4A487.7 487.7 0 0 0 176 479.9a1.9 1.9 0 0 0 2.1-.7A348.2 348.2 0 0 0 208.1 430.4a1.9 1.9 0 0 0 -1-2.6 321.2 321.2 0 0 1 -45.9-21.9 1.9 1.9 0 0 1 -.2-3.1c3.1-2.3 6.2-4.7 9.1-7.1a1.8 1.8 0 0 1 1.9-.3c96.2 43.9 200.4 43.9 295.5 0a1.8 1.8 0 0 1 1.9 .2c2.9 2.4 6 4.9 9.1 7.2a1.9 1.9 0 0 1 -.2 3.1 301.4 301.4 0 0 1 -45.9 21.8 1.9 1.9 0 0 0 -1 2.6 391.1 391.1 0 0 0 30 48.8 1.9 1.9 0 0 0 2.1 .7A486 486 0 0 0 610.7 405.7a1.9 1.9 0 0 0 .8-1.4C623.7 277.6 590.9 167.5 524.5 69.8zM222.5 337.6c-29 0-52.8-26.6-52.8-59.2S193.1 219.1 222.5 219.1c29.7 0 53.3 26.8 52.8 59.2C275.3 311 251.9 337.6 222.5 337.6zm195.4 0c-29 0-52.8-26.6-52.8-59.2S388.4 219.1 417.9 219.1c29.7 0 53.3 26.8 52.8 59.2C470.7 311 447.5 337.6 417.9 337.6z"
-        />
-      </Svg>
+      <AnimatePresence>
+        {[1, 2, 3, 4, 5, 6].map((i) =>
+          i === visible ? (
+            <Box
+              variants={box}
+              initial="invisible"
+              animate="visible"
+              exit="exit"
+              key={i}
+            >
+              {i}
+            </Box>
+          ) : null
+        )}
+      </AnimatePresence>
+      <div>
+        <button onClick={prevPlease}>prev</button>
+        <button onClick={nextPlease}>next</button>
+      </div>
     </Wrapper>
   );
 }
