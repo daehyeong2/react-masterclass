@@ -3,7 +3,6 @@ import App from "./App";
 import { RecoilRoot } from "recoil";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { darkTheme } from "./theme";
-import { Helmet } from "react-helmet";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
