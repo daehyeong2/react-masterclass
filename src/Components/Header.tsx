@@ -74,7 +74,7 @@ const UnderLine = styled(motion.div)`
 const Input = styled(motion.input)`
   transform-origin: right center;
   position: absolute;
-  background-color: transparent;
+  background-color: ${(props) => props.theme.black.darker};
   border: #969696 1px solid;
   outline: none;
   color: white;
@@ -97,8 +97,12 @@ const logoVariants: Variants = {
 };
 
 const navVariants = {
-  top: { backgroundColor: "rgba(0,0,0,0)" },
-  scroll: { backgroundColor: "rgba(0,0,0,1)" },
+  top: {
+    backgroundColor: "rgba(0,0,0,0)",
+  },
+  scroll: {
+    backgroundColor: "rgba(0,0,0,1)",
+  },
 };
 
 function Header() {
