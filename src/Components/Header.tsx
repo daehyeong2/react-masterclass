@@ -50,6 +50,12 @@ const Item = styled.li`
   &:hover {
     color: ${(props) => props.theme.white.lighter};
   }
+  a {
+    transition: color 0.05s ease-in-out;
+    &:hover {
+      color: darkgrey;
+    }
+  }
 `;
 
 const Search = styled.span`
