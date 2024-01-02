@@ -6,6 +6,8 @@ import { AnimatePresence, Variants, motion } from "framer-motion";
 import { useState } from "react";
 import useWindowDimensions from "../useWindowDimensions";
 import { useHistory, useRouteMatch } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 const Wrapper = styled.div`
   background-color: black;
@@ -97,7 +99,51 @@ const BigMovie = styled(motion.div)`
   left: 0;
   right: 0;
   margin: 0 auto;
-  background-color: red;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: ${(props) => props.theme.black.darker};
+`;
+
+const BigCover = styled.div<{ $bgPhoto: string }>`
+  border-radius: 10px 10px 0 0;
+  background-size: cover;
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0),
+      ${(props) => props.theme.black.darker}
+    ),
+    url(${(props) => props.$bgPhoto});
+  background-position: center center;
+  position: relative;
+  width: 100%;
+  height: 40vh;
+`;
+
+const BigTitle = styled.h2`
+  color: ${(props) => props.theme.white.lighter};
+  padding: 20px;
+  position: absolute;
+  left: -5px;
+  bottom: 20px;
+  font-size: 28px;
+`;
+
+const BigCloseButton = styled.button`
+  position: absolute;
+  z-index: 99;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  border-radius: 5px;
+  background-color: ${(props) => props.theme.black.darker};
+  color: ${(props) => props.theme.white.lighter};
+`;
+
+const BigOverview = styled.p`
+  padding: 10px;
+  font-size: 16px;
 `;
 
 const BoxVariants: Variants = {
@@ -138,6 +184,10 @@ function Home() {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const width = useWindowDimensions();
+  const clickedMovie =
+    bigMovieMatch?.params.movieId &&
+    data?.results.find((movie) => movie.id === +bigMovieMatch.params.movieId);
+  console.log(clickedMovie);
   const increaseIndex = () => {
     if (data) {
       if (leaving) return;
@@ -153,7 +203,7 @@ function Home() {
   const onBoxClicked = (movieId: number) => {
     History.push(`/movies/${movieId}`);
   };
-  const onOverlayClick = () => {
+  const closeBigMovie = () => {
     History.push("/");
   };
   return (
@@ -211,9 +261,26 @@ function Home() {
                   style={{
                     position: "fixed",
                   }}
-                  onClick={onOverlayClick}
+                  onClick={closeBigMovie}
                 />
-                <BigMovie layoutId={bigMovieMatch.params.movieId} />
+                <BigMovie layoutId={bigMovieMatch.params.movieId}>
+                  {clickedMovie && (
+                    <>
+                      <BigCloseButton onClick={closeBigMovie}>
+                        <FontAwesomeIcon icon={faXmark} />
+                      </BigCloseButton>
+                      <BigCover
+                        $bgPhoto={makeImagePath(
+                          clickedMovie.backdrop_path,
+                          "w500"
+                        )}
+                      >
+                        <BigTitle>{clickedMovie.title}</BigTitle>
+                      </BigCover>
+                      <BigOverview>{clickedMovie.overview}</BigOverview>
+                    </>
+                  )}
+                </BigMovie>
               </>
             ) : null}
           </AnimatePresence>
