@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 const Nav = styled(motion.nav)`
   display: flex;
   justify-content: space-between;
+  z-index: 99;
   align-items: center;
   position: fixed;
   width: 100%;
@@ -27,7 +28,7 @@ const Col = styled.div`
   align-items: center;
 `;
 
-const Logo = styled(motion.svg)`
+const Logo = styled.svg`
   margin-right: 50px;
   width: 95px;
   height: 25px;
@@ -65,6 +66,7 @@ const Search = styled.form`
   display: flex;
   align-content: center;
   position: relative;
+  cursor: pointer;
   svg {
     width: 23px;
     height: 30px;
@@ -93,18 +95,7 @@ const Input = styled(motion.input)`
   left: -180px;
 `;
 
-const logoVariants: Variants = {
-  normal: { fillOpacity: 1 },
-  active: {
-    fillOpacity: [0.25, 1, 0.25],
-    transition: {
-      repeat: Infinity,
-      duration: 0.9,
-    },
-  },
-};
-
-const navVariants = {
+const navVariants: Variants = {
   top: {
     backgroundColor: "rgba(0,0,0,0)",
   },
@@ -119,6 +110,7 @@ interface IForm {
 
 function Header() {
   const History = useHistory();
+  const type = new URLSearchParams(History.location.search).get("type");
   const { register, handleSubmit } = useForm<IForm>();
   const [searchOpen, setSearchOpen] = useState(false);
   const homeMatch = useRouteMatch("/");
@@ -152,7 +144,15 @@ function Header() {
     }
   });
   const onValid = (data: IForm) => {
-    History.push(`/search?keyword=${data.keyword}`);
+    History.push(
+      `/search?keyword=${data.keyword}&type=${
+        History.location.pathname === "/"
+          ? "movie"
+          : type === "movie"
+          ? "movie"
+          : "tv"
+      }`
+    );
   };
   const onLogoClick = () => {
     History.push("/");
@@ -162,9 +162,7 @@ function Header() {
       <Col>
         <Logo
           onClick={onLogoClick}
-          variants={logoVariants}
-          initial="normal"
-          whileHover="active"
+          strokeOpacity={0}
           xmlns="http://www.w3.org/2000/svg"
           width="1024"
           height="276.742"
@@ -205,7 +203,7 @@ function Header() {
             {...register("keyword", { required: true, minLength: 2 })}
             animate={inputAnimation}
             initial={{ scaleX: 0, opacity: 0 }}
-            placeholder="Search for movie or tv show..."
+            placeholder="제목을 입력해 검색하세요"
           />
         </Search>
       </Col>

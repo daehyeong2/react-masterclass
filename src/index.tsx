@@ -3,6 +3,7 @@ import App from "./App";
 import { RecoilRoot } from "recoil";
 import { ThemeProvider, createGlobalStyle } from "styled-components";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { theme } from "./theme";
 
 const root = ReactDOM.createRoot(
@@ -80,6 +81,7 @@ root.render(
         <GlobalStyle />
         <App />
       </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </RecoilRoot>
 );
